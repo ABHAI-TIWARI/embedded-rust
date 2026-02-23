@@ -139,3 +139,20 @@ I will append new entries here as tasks are completed.
 - Artifact details:
   - size: `146K`
   - sha256: `774934a3231071e05c52a681f338cf5141659aa549c815195937d5db24849b0c`
+
+### 14) Expanded README with project explanation and tutorial links
+- Updated `README.md` from minimal placeholder to full documentation.
+- Added:
+  - project purpose and target hardware details,
+  - repository layout summary,
+  - build command,
+  - 4MB-safe binary export command,
+  - flash command,
+  - links to tutorial markdown files:
+    - `memory_safety.md`
+    - `variable_datatype.md`
+    - `byte_literal.md`
+    - `char.md`
+  - links to setup/history docs:
+    - `SETUP_AND_BUILD_STEPS.md`
+    - `ACTIVITY_HISTORY.md`
