@@ -105,3 +105,37 @@ I will append new entries here as tasks are completed.
 - Validation completed:
   - `cargo test --lib --target x86_64-unknown-linux-gnu` (16 tests passed)
   - `cargo build --release` (ESP32 build passed)
+
+### 12) Built and exported new timestamped binary
+- Rebuilt firmware with:
+  - `cargo build --release`
+- Exported compact 4MB-safe timestamped image into `dist` with:
+  - `espflash save-image --chip esp32 --merge --skip-padding --ignore-app-descriptor --flash-size 4mb ...`
+- New artifact created:
+  - `dist/embedded-rust-esp32-4mb-20260223-104334.bin`
+- Artifact details:
+  - size: `145K`
+  - sha256: `f5e10fe329111b37b572c18feb19f9c437b3e1f24025181045aa3629507e613a`
+
+### 13) Added char tutorial + built/exported new binary
+- Added new tutorial module: `src/char_tutorial.rs` with:
+  - topic API: `char_topics()`
+  - executable demos:
+    - `demo_ascii_char()`
+    - `demo_unicode_char()`
+    - `demo_unicode_utf8_len()`
+    - `demo_ascii_uppercase()`
+    - `demo_digit_to_number()`
+    - `run_char_demo()`
+  - unit tests for all demos and summary output
+- Exposed module in `src/lib.rs` (`pub mod char_tutorial;`).
+- Updated `src/main.rs` to print char tutorial topics and demo outputs at startup.
+- Added tutorial documentation file: `char.md`.
+- Validation completed:
+  - `cargo test --lib --target x86_64-unknown-linux-gnu` (23 tests passed)
+  - `cargo build --release` (ESP32 build passed)
+- Exported new timestamped binary:
+  - `dist/embedded-rust-esp32-4mb-20260223-104636.bin`
+- Artifact details:
+  - size: `146K`
+  - sha256: `774934a3231071e05c52a681f338cf5141659aa549c815195937d5db24849b0c`

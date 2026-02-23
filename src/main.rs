@@ -8,6 +8,7 @@ use esp_hal::{
     time::{Duration, Instant},
 };
 use embedded_rust::byte_literal::{byte_literal_topics, run_byte_literal_demo};
+use embedded_rust::char_tutorial::{char_topics, run_char_demo};
 use embedded_rust::memory_safety::memory_safety_features;
 use embedded_rust::variaabl_datatype::{run_variable_datatype_demo, variable_datatype_features};
 
@@ -62,6 +63,25 @@ fn main() -> ! {
     log::info!("Byte demo b\"HELLO\" length: {}\r\n", byte_demo.bytes_len);
     log::info!("Byte demo first byte: {}\r\n", byte_demo.bytes_first);
     log::info!("Byte demo HELLO sum: {}\r\n", byte_demo.hello_sum);
+
+    for topic in char_topics() {
+        log::info!("Char Topic: {}\r\n", topic.title);
+        log::info!("Rust example: {}\r\n", topic.rust_example);
+        log::info!("Explanation: {}\r\n", topic.explanation);
+    }
+
+    let char_demo = run_char_demo();
+    log::info!("Char demo ascii char: {}\r\n", char_demo.ascii_char);
+    log::info!("Char demo unicode char: {}\r\n", char_demo.unicode_char);
+    log::info!(
+        "Char demo unicode utf8 length: {}\r\n",
+        char_demo.unicode_len_utf8
+    );
+    log::info!("Char demo uppercase: {}\r\n", char_demo.upper_char);
+    log::info!(
+        "Char demo digit conversion: {:?}\r\n",
+        char_demo.digit_to_number
+    );
 
     loop {
         led.set_high();
