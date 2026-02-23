@@ -7,7 +7,9 @@ use esp_hal::{
     main,
     time::{Duration, Instant},
 };
+use embedded_rust::byte_literal::{byte_literal_topics, run_byte_literal_demo};
 use embedded_rust::memory_safety::memory_safety_features;
+use embedded_rust::variaabl_datatype::{run_variable_datatype_demo, variable_datatype_features};
 
 #[main]
 fn main() -> ! {
@@ -20,6 +22,46 @@ fn main() -> ! {
         log::info!("Rust guarantee: {}\r\n", feature.rust_guarantee);
         log::info!("C/C++ risk: {}\r\n", feature.c_cpp_risk);
     }
+
+    for topic in variable_datatype_features() {
+        log::info!("Variable/DataType Topic: {}\r\n", topic.topic);
+        log::info!("Rust example: {}\r\n", topic.rust_example);
+        log::info!("C/C++ note: {}\r\n", topic.c_cpp_note);
+    }
+
+    let demo = run_variable_datatype_demo();
+    log::info!("Demo immutable value: {}\r\n", demo.immutable_value);
+    log::info!("Demo mutable counter: {}\r\n", demo.mutable_counter);
+    log::info!("Demo strong type voltage_mv: {}\r\n", demo.voltage_mv);
+    log::info!("Demo inferred duty cycle: {}\r\n", demo.inferred_duty_cycle);
+    log::info!("Demo Option has value: {}\r\n", demo.option_has_value);
+    log::info!(
+        "Demo checked_add overflow handled: {}\r\n",
+        demo.checked_add_overflowed
+    );
+    log::info!(
+        "Demo tuple group (voltage,current,ok): ({},{},{})\r\n",
+        demo.tuple_group.0,
+        demo.tuple_group.1,
+        demo.tuple_group.2
+    );
+    log::info!(
+        "Demo underscore-unused active channel: {}\r\n",
+        demo.active_channel
+    );
+
+    for topic in byte_literal_topics() {
+        log::info!("Byte Literal Topic: {}\r\n", topic.title);
+        log::info!("Rust example: {}\r\n", topic.rust_example);
+        log::info!("Explanation: {}\r\n", topic.explanation);
+    }
+
+    let byte_demo = run_byte_literal_demo();
+    log::info!("Byte demo b'A' value: {}\r\n", byte_demo.ascii_a);
+    log::info!("Byte demo b'\\n' value: {}\r\n", byte_demo.newline);
+    log::info!("Byte demo b\"HELLO\" length: {}\r\n", byte_demo.bytes_len);
+    log::info!("Byte demo first byte: {}\r\n", byte_demo.bytes_first);
+    log::info!("Byte demo HELLO sum: {}\r\n", byte_demo.hello_sum);
 
     loop {
         led.set_high();
