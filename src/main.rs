@@ -16,12 +16,12 @@ fn main() -> ! {
 
     loop {
         led.set_high();
-        log::info!("LED status: ON");
+        log::info!("LED status: ON\r\n");
         let start_on = Instant::now();
         while start_on.elapsed() < Duration::from_millis(1000) {}
 
         led.set_low();
-        log::info!("LED status: OFF");
+        log::info!("LED status: OFF\r\n");
         let start_off = Instant::now();
         while start_off.elapsed() < Duration::from_millis(1000) {}
     }
