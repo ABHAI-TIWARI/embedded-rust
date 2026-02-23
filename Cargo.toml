@@ -1,0 +1,21 @@
+[package]
+name = "embedded-rust"
+version = "0.1.0"
+edition = "2024"
+
+[profile.dev]
+opt-level = 2
+
+[profile.release]
+codegen-units = 1
+debug = 2
+debug-assertions = false
+incremental = false
+lto = "fat"
+opt-level = "s"
+
+[dependencies]
+esp-backtrace = { version = "0.18.1", features = ["esp32", "panic-handler", "println"] }
+esp-hal = { version = "1.0.0", features = ["esp32"] }
+esp-println = { version = "0.16.1", features = ["esp32", "log-04"] }
+log = "0.4"
