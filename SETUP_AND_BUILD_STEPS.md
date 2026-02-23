@@ -1,24 +1,23 @@
-# ESP32-WROOM Embedded Rust Setup Log
+# ESP32-WROOM Embedded Rust Setup and Execution Log
 
-This file records each step performed to install Embedded Rust + ESP32 support, create a hello-world firmware, build it, and export a binary for flashing from a local machine.
+This document records everything completed in this repository to set up Embedded Rust for ESP32-WROOM DevKit V1, implement firmware, build, and export flashable binaries.
 
-## 1) Workspace inspection
+## 1) Initial repository state
 
-Commands run:
+Initial workspace content:
 
-```bash
-ls -la
-cat README.md
-```
+- `README.md` only
 
-Result:
-- Repository initially contained only a minimal `README.md`.
+Actions taken:
+
+- Inspected repository structure.
+- Confirmed no Rust project/toolchain was preconfigured in the container.
 
 ---
 
-## 2) Install Rust toolchain
+## 2) Rust installation and baseline toolchain setup
 
-Commands run:
+Commands executed:
 
 ```bash
 curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -26,91 +25,94 @@ source "$HOME/.cargo/env"
 rustup default stable
 rustc --version
 cargo --version
+rustup --version
 ```
 
-Result:
-- Installed Rust via `rustup`.
-- Set default stable toolchain.
-- Verified compiler and cargo availability.
+Outcome:
+
+- Rust installed via `rustup`.
+- Stable toolchain set as default (`rustc 1.93.1` in this environment).
 
 ---
 
-## 3) Install ESP Rust tools
+## 3) ESP Rust tooling installation
 
-Commands run:
+Commands executed:
 
 ```bash
 source "$HOME/.cargo/env"
 cargo install espup --locked
 cargo install espflash --locked
 cargo install ldproxy --locked
+cargo install cargo-generate --locked
 ```
 
-Result:
-- Installed:
-  - `espup 0.16.0`
-  - `espflash 4.3.0`
-  - `ldproxy 0.3.4`
+Outcome:
+
+- Installed `espup`, `espflash`, `ldproxy`, and `cargo-generate`.
+- Verified `espup --version` and `espflash --version` worked.
 
 ---
 
-## 4) Install ESP32 Xtensa toolchain
+## 4) ESP32 Xtensa toolchain setup
 
-Command run:
+Commands executed:
 
 ```bash
 source "$HOME/.cargo/env"
 espup install -t esp32
+source "$HOME/export-esp.sh"
+rustup toolchain list
 ```
 
-Result:
-- Installed Espressif Xtensa Rust toolchain (`esp`) and GCC toolchain.
-- Generated environment file: `~/export-esp.sh`.
+Outcome:
 
-Important for new terminals:
+- Installed Espressif Xtensa Rust toolchain (`esp`) and required GCC tools.
+- Export script generated at `~/export-esp.sh`.
+- Confirmed both `stable` and `esp` toolchains present.
+
+Important for every new terminal:
 
 ```bash
+source "$HOME/.cargo/env"
 source "$HOME/export-esp.sh"
 ```
 
 ---
 
-## 5) Initialize firmware project and add ESP32 files
+## 5) Project creation and firmware base files
 
-Command run:
+Command executed:
 
 ```bash
 source "$HOME/.cargo/env"
 cargo init --name embedded-rust --bin .
 ```
 
-Then these files were created/updated:
+Files created/updated for firmware build:
 
 - `Cargo.toml`
+- `Cargo.lock`
 - `.cargo/config.toml`
 - `rust-toolchain.toml`
 - `build.rs`
 - `src/main.rs`
 
-### Project configuration summary
+Configuration summary:
 
-- Target MCU: **ESP32** (fits ESP32-WROOM modules)
+- Target MCU: ESP32 (compatible with ESP32-WROOM DevKit V1)
 - Target triple: `xtensa-esp32-none-elf`
-- Main crates:
+- Primary dependencies:
   - `esp-hal = 1.0.0`
   - `esp-backtrace = 0.18.1`
   - `esp-println = 0.16.1`
   - `log = 0.4`
-- Entry point: `#[main]`
-- Hello-world output methods:
-  - `esp_println::println!`
-  - UART0 text output (115200 baud)
 
 ---
 
-## 6) Build (compile) firmware
+## 6) Build stabilization and successful compile
 
-Command run:
+Build command used:
 
 ```bash
 source "$HOME/.cargo/env"
@@ -118,82 +120,158 @@ source "$HOME/export-esp.sh"
 cargo build --release
 ```
 
-Build notes:
-- First build attempts exposed missing/compatibility issues.
-- Fixed by:
-  - Enabling build-std core in `.cargo/config.toml`
-  - Updating code to stable `esp-hal 1.0.0` APIs
-  - Using `xtensa-esp32-elf-gcc` linker in `.cargo/config.toml`
+Adjustments made during iteration:
 
-Final result:
-- Build successful.
-- Produced ELF:
-  - `target/xtensa-esp32-none-elf/release/embedded-rust`
+- Added/updated target build configuration for Xtensa (`xtensa-esp32-none-elf`).
+- Fixed linker/toolchain setup to produce successful release builds.
+- Verified final release ELF generated at:
+
+`target/xtensa-esp32-none-elf/release/embedded-rust`
 
 ---
 
-## 7) Export single binary for local-machine flashing
+## 7) Firmware behavior changes completed
 
-Command run:
+### 7.1 Hello-world baseline
+
+Implemented initial firmware and validated compile.
+
+### 7.2 LED blink firmware for ESP32-WROOM DevKit V1
+
+Updated `src/main.rs` to use onboard LED pin `GPIO2`:
+
+- LED ON for 1 second
+- LED OFF for 1 second
+- repeat forever
+
+### 7.3 ESP logging for LED state
+
+Added logger init and status logs:
+
+- `LED status: ON`
+- `LED status: OFF`
+
+### 7.4 Forced newline output in logs
+
+Updated logs to include explicit CRLF (`\r\n`) so each print appears on a new line in serial monitors.
+
+---
+
+## 8) Binary export attempts and final working approach
+
+### Attempt A: raw `objcopy` binary
+
+Command used:
 
 ```bash
-source "$HOME/.cargo/env"
-source "$HOME/export-esp.sh"
-mkdir -p dist
-espflash save-image \
-  --chip esp32 \
-  --ignore-app-descriptor \
-  --merge \
-  target/xtensa-esp32-none-elf/release/embedded-rust \
-  dist/embedded-rust-esp32-merged.bin
+xtensa-esp32-elf-objcopy -O binary target/xtensa-esp32-none-elf/release/embedded-rust dist/embedded-rust-esp32.bin
 ```
 
 Result:
-- Export successful.
-- Flashable merged binary created:
-  - `dist/embedded-rust-esp32-merged.bin`
 
----
+- Produced large raw binary (`~13MB`) due to sparse memory layout.
+- Flashing at `0x0` failed for 4MB ESP32 with:
+  - “will not fit in 4194304 bytes of flash”.
 
-## 8) Flash from your local machine (ESP32-WROOM)
+### Attempt B: `espflash save-image` default options
 
-Copy the exported binary to your local machine, then flash with one of the following methods.
+Result:
 
-### Option A: `esptool.py` (common and reliable)
+- Failed because app descriptor check was enforced for this app format.
 
-```bash
-esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x0 embedded-rust-esp32-merged.bin
-```
-
-Notes:
-- On Windows, port is usually like `COM3`.
-- On Linux/macOS, often `/dev/ttyUSB0` or `/dev/ttyACM0`.
-
-### Option B: Using `espflash` directly with ELF (if project exists on local machine)
+### Final working export command (recommended)
 
 ```bash
-source "$HOME/export-esp.sh"
-cargo build --release
-espflash flash --monitor --chip esp32 target/xtensa-esp32-none-elf/release/embedded-rust
+source "$HOME/.cargo/env"
+mkdir -p dist
+espflash save-image \
+  --chip esp32 \
+  --merge \
+  --skip-padding \
+  --ignore-app-descriptor \
+  --flash-size 4mb \
+  target/xtensa-esp32-none-elf/release/embedded-rust \
+  dist/embedded-rust-esp32-4mb.bin
 ```
 
----
+Outcome:
 
-## 9) Expected hello-world output
-
-After flashing and opening serial monitor at 115200 baud, expected output includes:
-
-- `Hello, world from ESP32-WROOM!`
-- `Hello from UART0 on ESP32-WROOM!`
-- repeated heartbeat lines every ~1 second.
+- Created compact merged binary for ESP32-WROOM 4MB flash:
+  - `dist/embedded-rust-esp32-4mb.bin` (~142KB)
 
 ---
 
-## 10) Quick rerun commands (in this repo)
+## 9) Timestamped binary export
+
+Command executed:
+
+```bash
+source "$HOME/.cargo/env"
+mkdir -p dist
+TS=$(date +%Y%m%d-%H%M%S)
+OUT="dist/embedded-rust-esp32-4mb-${TS}.bin"
+espflash save-image --chip esp32 --merge --skip-padding --ignore-app-descriptor --flash-size 4mb \
+  target/xtensa-esp32-none-elf/release/embedded-rust "$OUT"
+```
+
+Generated file:
+
+- `dist/embedded-rust-esp32-4mb-20260223-084747.bin`
+
+---
+
+## 10) Current firmware source status
+
+`src/main.rs` currently:
+
+- initializes ESP HAL
+- configures `GPIO2` as output
+- blinks LED at 1 second ON / 1 second OFF
+- logs LED state with explicit `\r\n` newlines
+
+---
+
+## 11) Build and export commands to repeat now
+
+### Build
 
 ```bash
 source "$HOME/.cargo/env"
 source "$HOME/export-esp.sh"
 cargo build --release
-espflash flash --monitor --chip esp32 target/xtensa-esp32-none-elf/release/embedded-rust
+```
+
+### Export compact 4MB binary
+
+```bash
+source "$HOME/.cargo/env"
+mkdir -p dist
+espflash save-image --chip esp32 --merge --skip-padding --ignore-app-descriptor --flash-size 4mb \
+  target/xtensa-esp32-none-elf/release/embedded-rust dist/embedded-rust-esp32-4mb.bin
+```
+
+### Export timestamped binary
+
+```bash
+source "$HOME/.cargo/env"
+mkdir -p dist
+TS=$(date +%Y%m%d-%H%M%S)
+espflash save-image --chip esp32 --merge --skip-padding --ignore-app-descriptor --flash-size 4mb \
+  target/xtensa-esp32-none-elf/release/embedded-rust dist/embedded-rust-esp32-4mb-${TS}.bin
+```
+
+---
+
+## 12) Local flashing reference (ESP32-WROOM DevKit V1)
+
+Use compact image at address `0x0`:
+
+```bash
+espflash write-bin 0x0 dist/embedded-rust-esp32-4mb.bin
+```
+
+If using a timestamped file:
+
+```bash
+espflash write-bin 0x0 dist/embedded-rust-esp32-4mb-YYYYMMDD-HHMMSS.bin
 ```
