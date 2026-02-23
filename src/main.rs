@@ -12,6 +12,8 @@ use embedded_rust::char_tutorial::{char_topics, run_char_demo};
 use embedded_rust::memory_safety::memory_safety_features;
 use embedded_rust::variaabl_datatype::{run_variable_datatype_demo, variable_datatype_features};
 
+esp_bootloader_esp_idf::esp_app_desc!();
+
 #[main]
 fn main() -> ! {
     let peripherals = esp_hal::init(esp_hal::Config::default());

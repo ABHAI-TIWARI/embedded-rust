@@ -106,6 +106,7 @@ Configuration summary:
   - `esp-hal = 1.0.0`
   - `esp-backtrace = 0.18.1`
   - `esp-println = 0.16.1`
+  - `esp-bootloader-esp-idf = 0.4.0` (required for ESP-IDF app descriptor)
   - `log = 0.4`
 
 ---
@@ -246,7 +247,7 @@ cargo build --release
 ```bash
 source "$HOME/.cargo/env"
 mkdir -p dist
-espflash save-image --chip esp32 --merge --skip-padding --ignore-app-descriptor --flash-size 4mb \
+espflash save-image --chip esp32 --merge --skip-padding --flash-size 4mb \
   target/xtensa-esp32-none-elf/release/embedded-rust dist/embedded-rust-esp32-4mb.bin
 ```
 
@@ -256,9 +257,29 @@ espflash save-image --chip esp32 --merge --skip-padding --ignore-app-descriptor 
 source "$HOME/.cargo/env"
 mkdir -p dist
 TS=$(date +%Y%m%d-%H%M%S)
-espflash save-image --chip esp32 --merge --skip-padding --ignore-app-descriptor --flash-size 4mb \
+espflash save-image --chip esp32 --merge --skip-padding --flash-size 4mb \
   target/xtensa-esp32-none-elf/release/embedded-rust dist/embedded-rust-esp32-4mb-${TS}.bin
 ```
+
+---
+
+## 13) ESP-IDF app descriptor requirement (updated)
+
+To avoid this error while flashing:
+
+- `ESP-IDF App Descriptor ... missing in your esp-hal application`
+
+the project now includes:
+
+- dependency in `Cargo.toml`:
+
+  - `esp-bootloader-esp-idf = 0.4.0` (for `xtensa` target)
+
+- descriptor macro in `src/main.rs`:
+
+  - `esp_bootloader_esp_idf::esp_app_desc!();`
+
+With this in place, standard `espflash flash --monitor ...` and `espflash save-image ...` flows work without `--ignore-app-descriptor`.
 
 ---
 
