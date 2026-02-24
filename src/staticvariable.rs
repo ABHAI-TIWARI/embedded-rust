@@ -1,7 +1,13 @@
+// `AtomicU32` provides thread/interrupt-safe shared integer updates.
+// `Ordering` controls memory-order semantics for atomic operations.
 use core::sync::atomic::{AtomicU32, Ordering};
 
 // This struct describes one tutorial topic that will be printed in logs.
 // Each topic has a title, a short Rust example, and an explanation.
+// `derive(...)` gives:
+// - `Debug` for `{:?}` printing
+// - `Clone`/`Copy` for value-copy behavior
+// - `PartialEq`/`Eq` for equality assertions in tests
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct StaticVariableTopic {
     // Human-readable topic heading.
@@ -14,6 +20,7 @@ pub struct StaticVariableTopic {
 
 // This struct stores computed results from executable demo functions.
 // It helps keep the tutorial testable and easy to log from main.
+// Same derived traits for demo-result struct to support test comparisons and debug prints.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct StaticVariableDemoResults {
     // Result of local variable demo.

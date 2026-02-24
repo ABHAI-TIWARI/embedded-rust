@@ -1,3 +1,6 @@
+// Apply `no_std` for normal firmware builds, but allow `std` during tests.
+// `cfg_attr(condition, attr)` means: apply `attr` only when condition is true.
+// Here: when NOT running tests, compile as `no_std`.
 #![cfg_attr(not(test), no_std)]
 
 // Memory safety tutorial module (ownership, borrowing, lifetimes, etc.).

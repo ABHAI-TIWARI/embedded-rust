@@ -1,6 +1,8 @@
 // Variable and data type tutorial module with concrete executable examples.
 // Designed to be modular and testable, similar to memory_safety.rs.
 
+// `derive(...)` here gives debug print support, copy/clone behavior,
+// and equality checks for assertions in unit tests.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct VariableDatatypeFeature {
     // Topic heading for tutorial logs.
@@ -11,6 +13,7 @@ pub struct VariableDatatypeFeature {
     pub c_cpp_note: &'static str,
 }
 
+// Same derive set for aggregate result struct so tests can compare/inspect easily.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct VariableDatatypeDemoResults {
     // Result from immutability demo.

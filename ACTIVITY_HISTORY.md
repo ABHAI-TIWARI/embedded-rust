@@ -216,3 +216,11 @@ I will append new entries here as tasks are completed.
   - C-to-Rust mapping for superloop firmware,
   - app descriptor purpose,
   - GPIO2 LED control and ON/OFF loop behavior.
+
+### 20) Added explicit explanations for requested Rust syntax items
+- Added direct explanation comments for:
+  - `#![cfg_attr(not(test), no_std)]` in `src/lib.rs`
+  - `#[derive(Debug, Clone, Copy, PartialEq, Eq)]` in tutorial modules
+  - `use core::sync::atomic::{AtomicU32, Ordering};` in `src/staticvariable.rs`
+- Validation completed:
+  - `cargo build --release` (ESP32 build passed)

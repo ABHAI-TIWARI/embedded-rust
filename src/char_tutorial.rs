@@ -1,3 +1,5 @@
+// `derive(...)` provides debug formatting, copy/clone convenience,
+// and equality traits useful in tests.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct CharTopic {
     // Topic title shown in logs.
@@ -8,6 +10,7 @@ pub struct CharTopic {
     pub explanation: &'static str,
 }
 
+// Same derived traits for result struct to keep testing and logging simple.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct CharDemoResults {
     // ASCII char demo result.

@@ -2,6 +2,10 @@
 // It explains Rust memory safety features by contrasting them with common
 // C/C++ failure modes.
 
+// `derive(...)` auto-implements common traits:
+// - `Debug`: printable with `{:?}`
+// - `Clone`/`Copy`: cheap copy semantics for this small struct
+// - `PartialEq`/`Eq`: equality comparisons in tests
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct SafetyFeature {
     // Topic name printed in tutorial output.

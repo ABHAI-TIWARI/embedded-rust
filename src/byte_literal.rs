@@ -1,3 +1,4 @@
+// `derive(...)` auto-adds debug printing, simple copy semantics, and equality checks.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ByteLiteralTopic {
     // Topic title for logging.
@@ -8,6 +9,7 @@ pub struct ByteLiteralTopic {
     pub explanation: &'static str,
 }
 
+// Same derived traits for easy logging and test assertions.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ByteLiteralDemoResults {
     // ASCII value of single-byte literal demo.
