@@ -156,3 +156,32 @@ I will append new entries here as tasks are completed.
   - links to setup/history docs:
     - `SETUP_AND_BUILD_STEPS.md`
     - `ACTIVITY_HISTORY.md`
+
+### 15) Added variable scope/static tutorial + exported new binary
+- Added new tutorial module: `src/staticvariable.rs` covering:
+  - local variable demo
+  - global/static variable demo (atomic counter)
+  - naming convention demos (`snake_case`, `UPPER_CASE`, `CamelCase`)
+  - aggregate demo API: `run_staticvariable_demo()`
+  - unit tests for all APIs
+- Exposed module in `src/lib.rs` (`pub mod staticvariable;`).
+- Updated `src/main.rs` to print static/scope topics and demo outputs in logger.
+- Added tutorial documentation file: `staticvariable.md`.
+- Firmware build completed and new timestamped binary exported:
+  - `dist/embedded-rust-esp32-4mb-20260224-063346.bin`
+- Artifact details:
+  - size: `147K`
+  - sha256: `4919a304a492209e8f882828758d7d258d51063228fa915cab360f6e5bb4ff93`
+- Note:
+  - Host test run hit a toolchain/config conflict (`duplicate lang item core`) in current environment; ESP32 release build/export still succeeded.
+
+### 16) Expanded static variable tutorial coverage in docs
+- Updated `staticvariable.md` to explicitly include requested lecture topics:
+  - global vs local variables distinction,
+  - `let` and local type inference,
+  - `static` requirement for global variables,
+  - uppercase naming for global/static variables,
+  - immutable vs mutable static variables,
+  - `unsafe` requirement and data-race caution for `static mut`,
+  - memory placement/safety notes (ROM/flash vs RAM),
+  - `'static` lifetime explanation.

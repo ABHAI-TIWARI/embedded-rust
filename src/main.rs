@@ -10,6 +10,7 @@ use esp_hal::{
 use embedded_rust::byte_literal::{byte_literal_topics, run_byte_literal_demo};
 use embedded_rust::char_tutorial::{char_topics, run_char_demo};
 use embedded_rust::memory_safety::memory_safety_features;
+use embedded_rust::staticvariable::{run_staticvariable_demo, staticvariable_topics};
 use embedded_rust::variaabl_datatype::{run_variable_datatype_demo, variable_datatype_features};
 
 esp_bootloader_esp_idf::esp_app_desc!();
@@ -84,6 +85,25 @@ fn main() -> ! {
         "Char demo digit conversion: {:?}\r\n",
         char_demo.digit_to_number
     );
+
+    for topic in staticvariable_topics() {
+        log::info!("Static/Scope Topic: {}\r\n", topic.title);
+        log::info!("Rust example: {}\r\n", topic.rust_example);
+        log::info!("Explanation: {}\r\n", topic.explanation);
+    }
+
+    let scope_demo = run_staticvariable_demo();
+    log::info!("Scope demo local counter: {}\r\n", scope_demo.local_counter);
+    log::info!(
+        "Scope demo global boot count: {}\r\n",
+        scope_demo.global_boot_count
+    );
+    log::info!("Scope demo snake_case valid: {}\r\n", scope_demo.snake_case_ok);
+    log::info!(
+        "Scope demo UPPER_CASE constant limit: {}\r\n",
+        scope_demo.constant_limit
+    );
+    log::info!("Scope demo CamelCase type name: {}\r\n", scope_demo.type_name);
 
     loop {
         led.set_high();
