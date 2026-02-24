@@ -4,7 +4,7 @@ Embedded Rust demo project for ESP32-WROOM DevKit V1.
 
 This repository contains:
 - firmware that blinks onboard LED on GPIO2,
-- startup tutorial logs (memory safety, variable/data types, byte literals, char),
+- startup tutorial logs (memory safety, variable/data types, byte literals, char, static/global variables),
 - reproducible build/export flow for ESP32 4MB flash.
 
 ## Target Hardware
@@ -63,6 +63,7 @@ espflash write-bin 0x0 dist/embedded-rust-esp32-4mb-YYYYMMDD-HHMMSS.bin
 - [variable_datatype.md](variable_datatype.md)
 - [byte_literal.md](byte_literal.md)
 - [char.md](char.md)
+- [staticvariable.md](staticvariable.md)
 
 ## Logs / Execution History
 
