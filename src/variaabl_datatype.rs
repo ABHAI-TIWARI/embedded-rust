@@ -3,23 +3,35 @@
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct VariableDatatypeFeature {
+    // Topic heading for tutorial logs.
     pub topic: &'static str,
+    // Minimal Rust snippet for this concept.
     pub rust_example: &'static str,
+    // C/C++ comparison note for context.
     pub c_cpp_note: &'static str,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct VariableDatatypeDemoResults {
+    // Result from immutability demo.
     pub immutable_value: i32,
+    // Result from mutability demo.
     pub mutable_counter: u32,
+    // Result from typed numeric variable demo.
     pub voltage_mv: u16,
+    // Result from type inference demo.
     pub inferred_duty_cycle: u8,
+    // Indicates whether Option had a value.
     pub option_has_value: bool,
+    // Indicates overflow handling branch.
     pub checked_add_overflowed: bool,
+    // Tuple-grouped values demo result.
     pub tuple_group: (u16, u16, bool),
+    // Result from underscore-unused variable demo.
     pub active_channel: u8,
 }
 
+// Static list of tutorial topics.
 const FEATURES: [VariableDatatypeFeature; 8] = [
     VariableDatatypeFeature {
         topic: "Immutability by Default",
@@ -63,23 +75,28 @@ const FEATURES: [VariableDatatypeFeature; 8] = [
     },
 ];
 
+// Returns all variable/data-type tutorial topics.
 pub fn variable_datatype_features() -> &'static [VariableDatatypeFeature] {
     &FEATURES
 }
 
+// Returns topic count.
 pub fn topic_count() -> usize {
     FEATURES.len()
 }
 
+// Finds one topic by exact name.
 pub fn topic_by_name(name: &str) -> Option<&'static VariableDatatypeFeature> {
     FEATURES.iter().find(|item| item.topic == name)
 }
 
+// Demonstrates immutability by default.
 pub fn demo_immutability() -> i32 {
     let value: i32 = 10;
     value
 }
 
+// Demonstrates explicit mutability via `mut`.
 pub fn demo_mutability() -> u32 {
     let mut counter: u32 = 0;
     counter += 1;
@@ -87,38 +104,45 @@ pub fn demo_mutability() -> u32 {
     counter
 }
 
+// Demonstrates explicit numeric typing.
 pub fn demo_strong_typing() -> u16 {
     let voltage_mv: u16 = 3300;
     voltage_mv
 }
 
+// Demonstrates type inference with suffix.
 pub fn demo_type_inference() -> u8 {
     let duty_cycle = 128u8;
     duty_cycle
 }
 
+// Demonstrates Option instead of null-like value.
 pub fn demo_option_instead_of_null() -> Option<u16> {
     let sensor_value: Option<u16> = None;
     sensor_value
 }
 
+// Demonstrates checked addition overflow handling.
 pub fn demo_checked_add_overflow() -> Option<u8> {
     let left: u8 = 250;
     let right: u8 = 10;
     left.checked_add(right)
 }
 
+// Demonstrates tuple initialization for grouped values.
 pub fn demo_tuple_group_initialization() -> (u16, u16, bool) {
     let sensor_group: (u16, u16, bool) = (3300, 120, true);
     sensor_group
 }
 
+// Demonstrates underscore prefix for intentionally unused variable.
 pub fn demo_underscore_unused_variable() -> u8 {
     let _raw_adc: u16 = 512;
     let active_channel: u8 = 2;
     active_channel
 }
 
+// Runs all demos and aggregates outputs.
 pub fn run_variable_datatype_demo() -> VariableDatatypeDemoResults {
     VariableDatatypeDemoResults {
         immutable_value: demo_immutability(),
@@ -134,6 +158,7 @@ pub fn run_variable_datatype_demo() -> VariableDatatypeDemoResults {
 
 #[cfg(test)]
 mod tests {
+    // Import functions under test.
     use super::{
         demo_checked_add_overflow, demo_immutability, demo_mutability,
         demo_option_instead_of_null, demo_strong_typing, demo_tuple_group_initialization,
@@ -141,21 +166,25 @@ mod tests {
         topic_by_name, topic_count, variable_datatype_features,
     };
 
+    // Verifies expected topic count.
     #[test]
     fn has_expected_topics() {
         assert_eq!(topic_count(), 8);
     }
 
+    // Verifies known topic lookup succeeds.
     #[test]
     fn finds_existing_topic() {
         assert!(topic_by_name("Immutability by Default").is_some());
     }
 
+    // Verifies unknown topic lookup fails safely.
     #[test]
     fn returns_none_for_missing_topic() {
         assert!(topic_by_name("Dynamic Typing").is_none());
     }
 
+    // Verifies all topic records are fully populated.
     #[test]
     fn topic_fields_are_not_empty() {
         for topic in variable_datatype_features() {
@@ -165,6 +194,7 @@ mod tests {
         }
     }
 
+    // Verifies all executable demo functions return expected values.
     #[test]
     fn executable_examples_produce_expected_values() {
         assert_eq!(demo_immutability(), 10);
@@ -177,6 +207,7 @@ mod tests {
         assert_eq!(demo_underscore_unused_variable(), 2);
     }
 
+    // Verifies aggregate summary has consistent values.
     #[test]
     fn aggregate_demo_summary_is_correct() {
         let summary = run_variable_datatype_demo();

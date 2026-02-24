@@ -4,11 +4,15 @@
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct SafetyFeature {
+    // Topic name printed in tutorial output.
     pub title: &'static str,
+    // Rust-side safety promise for this topic.
     pub rust_guarantee: &'static str,
+    // Typical C/C++ risk contrasted against Rust behavior.
     pub c_cpp_risk: &'static str,
 }
 
+// Static list of memory-safety lessons.
 const FEATURES: [SafetyFeature; 5] = [
     SafetyFeature {
         title: "Ownership",
@@ -37,39 +41,47 @@ const FEATURES: [SafetyFeature; 5] = [
     },
 ];
 
+// Returns all memory safety lessons.
 pub fn memory_safety_features() -> &'static [SafetyFeature] {
     &FEATURES
 }
 
+// Returns lesson count, used by tests and summaries.
 pub fn lesson_count() -> usize {
     FEATURES.len()
 }
 
+// Finds a lesson by exact title.
 pub fn feature_by_title(title: &str) -> Option<&'static SafetyFeature> {
     FEATURES.iter().find(|feature| feature.title == title)
 }
 
 #[cfg(test)]
 mod tests {
+    // Import public APIs for unit testing.
     use super::{feature_by_title, lesson_count, memory_safety_features};
 
+    // Verifies total number of lessons remains expected.
     #[test]
     fn has_expected_number_of_lessons() {
         assert_eq!(lesson_count(), 5);
     }
 
+    // Verifies known lesson lookup works.
     #[test]
     fn ownership_lesson_exists() {
         let feature = feature_by_title("Ownership");
         assert!(feature.is_some());
     }
 
+    // Verifies unknown lesson returns `None`.
     #[test]
     fn unknown_lesson_returns_none() {
         let feature = feature_by_title("Garbage Collector");
         assert!(feature.is_none());
     }
 
+    // Verifies every lesson has complete non-empty text.
     #[test]
     fn every_lesson_has_complete_text() {
         for feature in memory_safety_features() {

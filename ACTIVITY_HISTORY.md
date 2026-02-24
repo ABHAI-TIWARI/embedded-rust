@@ -185,3 +185,34 @@ I will append new entries here as tasks are completed.
   - `unsafe` requirement and data-race caution for `static mut`,
   - memory placement/safety notes (ROM/flash vs RAM),
   - `'static` lifetime explanation.
+
+### 17) Added line-by-line explanatory comments in staticvariable module
+- Updated `src/staticvariable.rs` with tutorial comments before:
+  - key structs and fields,
+  - global/static variables,
+  - each demo function,
+  - each unit test.
+- Goal was readability for beginners directly in source code.
+- Validation completed:
+  - `cargo build --release` (ESP32 build passed)
+
+### 18) Added readability comments across all Rust source files
+- Added explanatory comments to remaining Rust files:
+  - `src/lib.rs`
+  - `build.rs`
+  - `src/main.rs`
+  - `src/memory_safety.rs`
+  - `src/variaabl_datatype.rs`
+  - `src/byte_literal.rs`
+  - `src/char_tutorial.rs`
+- Existing comments in `src/staticvariable.rs` were kept and aligned with tutorial style.
+- Validation completed:
+  - `cargo build --release` (ESP32 build passed)
+
+### 19) Added fresher-focused explanation directly in main source
+- Expanded `src/main.rs` with beginner-friendly training comments that explain:
+  - `#![no_std]` and `#![no_main]` for bare-metal firmware,
+  - embedded entrypoint model (`#[main] fn main() -> !`),
+  - C-to-Rust mapping for superloop firmware,
+  - app descriptor purpose,
+  - GPIO2 LED control and ON/OFF loop behavior.
