@@ -224,3 +224,25 @@ I will append new entries here as tasks are completed.
   - `use core::sync::atomic::{AtomicU32, Ordering};` in `src/staticvariable.rs`
 - Validation completed:
   - `cargo build --release` (ESP32 build passed)
+
+### 21) Added Rust constants tutorial + new timestamped binary export
+- Added new module: `src/constants.rs` with:
+  - topic API: `constant_topics()`
+  - executable demo APIs:
+    - `demo_supply_voltage()`
+    - `demo_max_retries()`
+    - `demo_uart_timeout()`
+    - `demo_firmware_banner()`
+    - `demo_acquisition_window()`
+    - `demo_local_constant()`
+    - `run_constants_demo()`
+  - tutorial-style comments throughout source
+  - unit tests validating constants and aggregate demo outputs
+- Exposed module in `src/lib.rs` (`pub mod constants;`).
+- Updated `src/main.rs` to print constants topics and constants demo outputs at startup.
+- Added line-by-line explanation file: `constants.md`.
+- Built firmware and exported timestamped binary:
+  - `dist/embedded-rust-esp32-4mb-20260225-061731.bin`
+- Artifact details:
+  - size: `148K`
+  - sha256: `e0630869852b20da7c0cc5bbde5a4612521933fde9d8e2bd7d3c829689395f4d`

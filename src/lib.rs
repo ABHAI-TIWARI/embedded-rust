@@ -13,3 +13,5 @@ pub mod byte_literal;
 pub mod char_tutorial;
 // Local/global/static variable and naming tutorial module.
 pub mod staticvariable;
+// Rust constants tutorial module.
+pub mod constants;

@@ -28,6 +28,7 @@ use esp_hal::{
 // Tutorial modules used to print educational startup logs.
 use embedded_rust::byte_literal::{byte_literal_topics, run_byte_literal_demo};
 use embedded_rust::char_tutorial::{char_topics, run_char_demo};
+use embedded_rust::constants::{constant_topics, run_constants_demo};
 use embedded_rust::memory_safety::memory_safety_features;
 use embedded_rust::staticvariable::{run_staticvariable_demo, staticvariable_topics};
 use embedded_rust::variaabl_datatype::{run_variable_datatype_demo, variable_datatype_features};
@@ -140,6 +141,40 @@ fn main() -> ! {
         scope_demo.constant_limit
     );
     log::info!("Scope demo CamelCase type name: {}\r\n", scope_demo.type_name);
+
+    // Print constants tutorial topics.
+    for topic in constant_topics() {
+        log::info!("Constants Topic: {}\r\n", topic.title);
+        log::info!("Rust example: {}\r\n", topic.rust_example);
+        log::info!("Explanation: {}\r\n", topic.explanation);
+    }
+
+    // Run constants demos and print computed values.
+    let constants_demo = run_constants_demo();
+    log::info!(
+        "Constants demo supply voltage (mV): {}\r\n",
+        constants_demo.supply_voltage_mv
+    );
+    log::info!(
+        "Constants demo max retries: {}\r\n",
+        constants_demo.max_retry_count
+    );
+    log::info!(
+        "Constants demo UART timeout (ms): {}\r\n",
+        constants_demo.uart_timeout_ms
+    );
+    log::info!(
+        "Constants demo banner: {}\r\n",
+        constants_demo.firmware_banner
+    );
+    log::info!(
+        "Constants demo acquisition window (ms): {}\r\n",
+        constants_demo.acquisition_window_ms
+    );
+    log::info!(
+        "Constants demo local constant result: {}\r\n",
+        constants_demo.local_constant_offset
+    );
 
     // Main firmware loop: blink onboard LED forever.
     // This is the same superloop pattern commonly used in embedded C projects.
