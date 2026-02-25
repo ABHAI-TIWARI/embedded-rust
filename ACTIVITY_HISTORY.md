@@ -246,3 +246,21 @@ I will append new entries here as tasks are completed.
 - Artifact details:
   - size: `148K`
   - sha256: `e0630869852b20da7c0cc5bbde5a4612521933fde9d8e2bd7d3c829689395f4d`
+
+### 22) Added buffer overflow tutorial + new timestamped binary export
+- Added new tutorial module: `src/bufferoverflow.rs` with:
+  - topic API: `bufferoverflow_topics()`
+  - executable demo APIs:
+    - `demo_safe_bounded_copy()`
+    - `demo_checked_index_write()`
+    - `run_bufferoverflow_demo()`
+  - C-comparison comments in source (unchecked `memcpy`/indexing vs Rust-safe patterns)
+  - unit tests for bounded copy, checked writes, and aggregate summary
+- Exposed module in `src/lib.rs` (`pub mod bufferoverflow;`).
+- Updated `src/main.rs` to print buffer-overflow topics and demo outputs at startup.
+- Added line-by-line explanation file: `bufferoverflow.md`.
+- Built firmware and exported timestamped binary:
+  - `dist/embedded-rust-esp32-4mb-20260225-073333.bin`
+- Artifact details:
+  - size: `149K`
+  - sha256: `7dda48aff5f217783b2369c48b677e5bc4d1880a70a5803de80fb34491a5530f`

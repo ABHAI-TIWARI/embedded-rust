@@ -15,3 +15,5 @@ pub mod char_tutorial;
 pub mod staticvariable;
 // Rust constants tutorial module.
 pub mod constants;
+// Buffer overflow prevention tutorial module.
+pub mod bufferoverflow;

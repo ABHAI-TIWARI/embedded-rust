@@ -26,6 +26,7 @@ use esp_hal::{
     time::{Duration, Instant},
 };
 // Tutorial modules used to print educational startup logs.
+use embedded_rust::bufferoverflow::{bufferoverflow_topics, run_bufferoverflow_demo};
 use embedded_rust::byte_literal::{byte_literal_topics, run_byte_literal_demo};
 use embedded_rust::char_tutorial::{char_topics, run_char_demo};
 use embedded_rust::constants::{constant_topics, run_constants_demo};
@@ -174,6 +175,32 @@ fn main() -> ! {
     log::info!(
         "Constants demo local constant result: {}\r\n",
         constants_demo.local_constant_offset
+    );
+
+    // Print buffer-overflow tutorial topics.
+    for topic in bufferoverflow_topics() {
+        log::info!("BufferOverflow Topic: {}\r\n", topic.title);
+        log::info!("Rust example: {}\r\n", topic.rust_example);
+        log::info!("Explanation: {}\r\n", topic.explanation);
+    }
+
+    // Run buffer-overflow safety demos and print results.
+    let overflow_demo = run_bufferoverflow_demo();
+    log::info!(
+        "BufferOverflow demo safe copied length: {}\r\n",
+        overflow_demo.safe_copied_len
+    );
+    log::info!(
+        "BufferOverflow demo copy truncated safely: {}\r\n",
+        overflow_demo.copy_was_truncated
+    );
+    log::info!(
+        "BufferOverflow demo checked write success: {}\r\n",
+        overflow_demo.checked_write_ok
+    );
+    log::info!(
+        "BufferOverflow demo checked write failure handled: {}\r\n",
+        overflow_demo.checked_write_fail
     );
 
     // Main firmware loop: blink onboard LED forever.
